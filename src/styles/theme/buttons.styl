@@ -1,0 +1,79 @@
+.button
+  display block
+  padding 10px 0
+  text-align center
+  transition box-shadow, opacity
+  transition-duration .2s
+  transition-timing-function ease-in-out
+  cursor pointer
+  font-size 16px
+  line-height 32px
+  border-bottom-width 0
+  border-radius 4px
+  border-width 0
+  font-weight 500
+  background-color #b1b1b1
+  box-shadow 0 2px 4px rgba(37, 37, 37, 0.1), inset 0 -1px 0 0 rgba(255,255,255,0.1), inset 0 1px 0 0 rgba(255,255,255,0.1)
+
+  &:disabled
+    cursor not-allowed
+    opacity 0.5
+    box-shadow 0 2px 4px rgba(37, 37, 37, 0.1), inset 0 -1px 0 0 rgba(255,255,255,0.1), inset 0 1px 0 0 rgba(255,255,255,0.1) !important
+
+  &:hover
+    box-shadow 0 6px 6px rgba(37, 37, 37, 0.2), inset 0 -1px 0 0 rgba(37,37,37,0.2), inset 0 1px 0 0 rgba(37,37,37,0.2)
+
+
+  &.blue
+    color #fff
+    background-color #174f7c
+    box-shadow 0 1px 2px rgba(3,49,86,.3), inset 0 -1px 0 #0d3f68, inset 0 1px 0 #2f6089
+    text-shadow 0 1px 1px rgba(3,49,86,.8)
+
+    &:disabled
+      cursor not-allowed
+      box-shadow 0 1px 2px rgba(3,49,86,.3), inset 0 -1px 0 #0d3f68, inset 0 1px 0 #2f6089 !important
+
+    &:hover
+      box-shadow 0 6px 6px rgba(3,49,86,.3), inset 0 -1px 0 #0d3f68, inset 0 1px 0 #2f6089
+
+  &.red
+    color #fff
+    background-color #D11F37
+    box-shadow 0 1px 2px rgba(188,31,55,.3), inset 0 -1px 0 #B4051D, inset 0 1px 0 #F04159
+
+    &:disabled
+      box-shadow 0 1px 2px rgba(188,31,55,.3), inset 0 -1px 0 #B4051D, inset 0 1px 0 #F04159 !important
+
+    &:hover
+      box-shadow 0 6px 6px rgba(188,31,55,.3), inset 0 -1px 0 #B4051D, inset 0 1px 0 #F04159
+
+  &.yellow
+    color #454545
+    background-color #f2da1d
+    box-shadow 0 1px 2px rgba(243, 244, 99, .5), inset 0 -1px 0 #e9d74a, inset 0 1px 0 #f7e23e
+
+    &:disabled
+      box-shadow 0 1px 2px rgba(243, 244, 99, .5), inset 0 -1px 0 #d2bb03, inset 0 1px 0 #f7e23e !important
+
+    &:hover
+      box-shadow 0 6px 6px rgba(243, 244, 99, .5), inset 0 -1px 0 #e9d74a, inset 0 1px 0 #f7e23e
+
+  &.small
+    background-color #f7f9fb
+    border 1px solid #e3e9ef
+    border-radius 4px
+    box-shadow 0 1px 2px rgba(41,97,142,.3), inset 0 1px 0 #fff
+    color #174f7c
+    font-size 14px
+    padding 0 16px
+    height 32px
+    display inline-block
+    position relative
+    transition box-shadow
+    transition-duration .35s
+    transition-timing-function ease-in-out
+
+    &:hover
+      opacity 1
+      box-shadow 0 4px 8px rgba(41,97,142,.3)

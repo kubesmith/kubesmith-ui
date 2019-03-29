@@ -6,9 +6,10 @@
 
 <script>
 export default {
-  name: 'kubesmith-ui',
+  name: 'Kubesmith',
 };
 </script>
 
 <style lang="stylus">
+ @import './styles/global.styl'
 </style>

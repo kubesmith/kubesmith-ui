@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import LoginRoute from '@/routes/login';
-import NotFoundRoute from '@/routes/not-found';
 import Cookie from 'js-cookie';
+import LoginRoute from '../routes/login';
+import NotFoundRoute from '../routes/not-found';
 
 Vue.use(Router);
 

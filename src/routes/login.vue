@@ -27,10 +27,10 @@
 </template>
 
 <script>
-import TitleDirective from '@/directives/title';
 import Cookie from 'js-cookie';
 // eslint-disable-next-line
-import LogoSVG from '@/assets/kubesmith-light.svg?import';
+import LogoSVG from '@/images/kubesmith-light.svg?import';
+import TitleDirective from '@/directives/title';
 
 export default {
   name: 'login',
@@ -60,7 +60,7 @@ export default {
     redirectUser() {
       let path = '/';
       if (this.path) {
-        path = this.path;
+        path = this[path];
       }
       Cookie.set('token', 'foobar');
       this.$router.push(path);
@@ -102,17 +102,17 @@ export default {
       right 0
 
     .shard-1
-      background-image url(../assets/background-shard-1.svg?normal)
+      background-image url(../images/background-shard-1.svg?normal)
       background-position 0 0
       background-size 464px 464px
 
     .shard-2
-      background-image url(../assets/background-shard-2.svg?normal)
+      background-image url(../images/background-shard-2.svg?normal)
       background-position 0 0
       background-size cover
 
     .shard-3
-      background-image url(../assets/background-shard-3.svg?normal)
+      background-image url(../images/background-shard-3.svg?normal)
       background-position right 100%
       background-size 747px 747px
 
