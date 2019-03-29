@@ -15,10 +15,21 @@
             <font-awesome-icon :icon="link.icon"/> {{ link.name }}
           </router-link>
         </li>
+        <li>
+          <span class="line"></span>
+        </li>
       </ul>
+    </div>
+    <div class="search">
+      <input type="text" placeholder="Search ..."/>
     </div>
     <div class="quick-links">
       <ul>
+        <li>
+          <div class="profile-picture">
+            <img src="https://gravatar.com/avatar/f9383ce985bd48ed45dcff66546f30a7"/>
+          </div>
+        </li>
         <li>
           <a href="javascript:void(0);" @click="logUserOut">
             <font-awesome-icon icon="sign-out-alt"/> Logout
@@ -80,7 +91,6 @@ export default {
 
 <style scoped lang="stylus">
   .navigation
-    flex 0 1 auto
     box-shadow 0 1px 2px rgba(3,49,86,.2)
     min-height 80px
     max-height 80px
@@ -121,7 +131,6 @@ export default {
           padding 0 8px
 
     .logo
-      flex 0 1 auto
       cursor pointer
       height 80px
 
@@ -156,10 +165,9 @@ export default {
         color #174f7c
 
     .main-links
-      flex 1
 
       .line
-        background-color #e3e9ef
+        background-color #c3c8ce
         display block
         position relative
         top 32px
@@ -172,10 +180,40 @@ export default {
         a
           color #174f7c
 
+    .search
+      flex 1
+      display flex
+      align-items center
+
+      input
+        flex 1
+        height 40px
+        max-width 110px
+        transition max-width
+        transition-duration .2s
+        transition-timing-function ease-in-out
+
+        &:focus
+          max-width 260px
+
+
     .quick-links
-      flex 0 1 auto
 
       ul
         margin-right 10px
+
+        li
+          display flex
+          align-items center
+
+          .profile-picture
+            display inline-block
+
+            img
+              border 1px solid #3d627f
+              vertical-align middle
+              width 40px
+              height 40px
+              border-radius 50%
 
 </style>
