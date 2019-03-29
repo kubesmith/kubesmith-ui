@@ -60,7 +60,7 @@ export default {
     redirectUser() {
       let { path } = this.$props;
 
-      if (path === '') {
+      if (!path) {
         path = '/';
       }
 
@@ -131,13 +131,16 @@ export default {
       margin-left 33%
       float left
       min-height 200px
+      margin-bottom 20%
 
       .header
         text-align center
 
         svg
           max-width 200px
-          opacity(0.6)
+
+          path
+            fill #e3e9ef
 
         h2
           color #fff

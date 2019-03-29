@@ -88,6 +88,11 @@ module.exports = {
       from: utils.resolve('src/images'),
       to: utils.resolve('dist/src/images'),
       toType: 'dir'
+    }]),
+    new CopyWebpackPlugin([{
+      from: utils.resolve('src/images/favicon/'),
+      to: utils.resolve('dist/'),
+      toType: 'dir'
     }])
   ]
 };

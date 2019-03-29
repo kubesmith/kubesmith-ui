@@ -1,10 +1,13 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Cookie from 'js-cookie';
-import DashboardRoute from '@/routes/dashboard';
+import BuildsRoute from '@/routes/builds';
 import LoginRoute from '@/routes/login';
 import NotFoundRoute from '@/routes/not-found';
 import SignUpRoute from '@/routes/sign-up';
+import RepositoriesRoute from '@/routes/repositories';
+import TeamsRoute from '@/routes/teams';
+import SettingsRoute from '@/routes/settings';
 import ResetPasswordRoute from '@/routes/reset-password';
 
 Vue.use(Router);
@@ -14,8 +17,27 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      name: 'dashboard',
-      component: DashboardRoute,
+      redirect: '/builds',
+    },
+    {
+      path: '/builds',
+      name: 'builds',
+      component: BuildsRoute,
+    },
+    {
+      path: '/repositories',
+      name: 'repositories',
+      component: RepositoriesRoute,
+    },
+    {
+      path: '/teams',
+      name: 'teams',
+      component: TeamsRoute,
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+      component: SettingsRoute,
     },
     {
       path: '/login',

@@ -1,5 +1,10 @@
 <template>
   <div class="reset-password" v-title="'Reset Password | Kubesmith'">
+    <h1>Reset Password</h1>
+
+    <router-link to="/login">
+      Go Back
+    </router-link>
   </div>
 </template>
 
