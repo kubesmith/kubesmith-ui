@@ -19,7 +19,7 @@
           <router-link to="/reset-password">Reset Password</router-link>
         </form>
         <div class="footer">
-          <span>Need an account?</span><router-link to="/signup">Sign up</router-link>
+          <span>Need an account?</span><router-link to="/sign-up">Sign up</router-link>
         </div>
       </div>
     </div>
@@ -58,10 +58,12 @@ export default {
       return regexp.test(email.toLowerCase());
     },
     redirectUser() {
-      let path = '/';
-      if (this.path) {
-        path = this[path];
+      let { path } = this.$props;
+
+      if (path === '') {
+        path = '/';
       }
+
       Cookie.set('token', 'foobar');
       this.$router.push(path);
     },
