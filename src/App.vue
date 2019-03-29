@@ -11,5 +11,5 @@ export default {
 </script>
 
 <style lang="stylus">
- @import './styles/global.styl'
+ @import './stylus/global.styl'
 </style>
