@@ -95,6 +95,7 @@ export default {
     min-height 80px
     max-height 80px
     display flex
+    background-color #fff
 
     ul
       margin 0

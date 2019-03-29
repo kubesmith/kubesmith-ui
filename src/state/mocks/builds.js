@@ -1,0 +1,81 @@
+// exports
+
+export default [
+  {
+    id: 1,
+    repository: 'kubesmith/kubesmith',
+    message: `Merge pull request #1 from some super long PR title that
+      probably should have been shortened but no one wanted to shorten it`,
+    sha: 'ce0f4b6f234fdg4sdfg44tafgwaert366',
+    branch: 'master',
+    ref: '',
+    durationSeconds: 657,
+    date: 1553832319,
+    status: 'running',
+    author: {
+      avatar: 'https://avatars3.githubusercontent.com/u/1470571?v=4',
+      email: 'carldanley@gmail.com',
+      username: 'carldanley',
+    },
+  }, {
+    id: 2,
+    repository: 'carldanley/website',
+    message: 'Tweaking CI',
+    sha: 'sdfgkjhgkh36g456hjlk2456234246677',
+    branch: 'feature/improve-ci',
+    ref: '',
+    durationSeconds: 496,
+    date: 1553832319,
+    status: 'queued',
+    author: {
+      avatar: 'https://avatars3.githubusercontent.com/u/1470571?v=4',
+      email: 'carldanley@gmail.com',
+      username: 'carldanley',
+    },
+  }, {
+    id: 3,
+    repository: 'carldanley/helm-charts',
+    message: 'Merge pull request #57: Added PostgresSQL helm chart',
+    sha: '0897sf98g76s9df876s9df86g9sdf6g97',
+    branch: 'master',
+    ref: 'refs/tags/0.1.15',
+    durationSeconds: 128,
+    date: 1553832319,
+    status: 'completed',
+    author: {
+      avatar: 'https://avatars3.githubusercontent.com/u/1470571?v=4',
+      email: 'carldanley@gmail.com',
+      username: 'carldanley',
+    },
+  }, {
+    id: 4,
+    repository: 'carldanley/helm-charts',
+    message: 'Added PostgresSQL helm chart',
+    sha: 'adg670fdg9234j5khggkj2hg345gg5j23',
+    branch: 'feature/add-postgres-chart',
+    ref: '',
+    durationSeconds: 128,
+    date: 1553832319,
+    status: 'failed',
+    author: {
+      avatar: 'https://avatars3.githubusercontent.com/u/1470571?v=4',
+      email: 'carldanley@gmail.com',
+      username: 'carldanley',
+    },
+  }, {
+    id: 5,
+    repository: 'carldanley/helm-charts',
+    message: 'Added PostgresSQL helm chart',
+    sha: 'kjh45gl2g456l3g245l6g354l6j3lkjjj',
+    branch: 'feature/add-postgres-chart',
+    ref: '',
+    durationSeconds: 665,
+    date: 1553832319,
+    status: 'cancelled',
+    author: {
+      avatar: 'https://avatars3.githubusercontent.com/u/1470571?v=4',
+      email: 'carldanley@gmail.com',
+      username: 'carldanley',
+    },
+  },
+];
