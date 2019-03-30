@@ -39,7 +39,7 @@
         </div>
       </div>
       <div class="information">
-        <div class="info duration">
+        <div v-if="!isQueued" class="info duration">
           <font-awesome-icon :icon="['far', 'hourglass']"/>
           {{ durationSeconds | easyTimeSeconds }}
         </div>
@@ -47,10 +47,23 @@
           <font-awesome-icon :icon="['far', 'calendar']"/>
           {{ date | dateAgo }}
         </div>
+        <div class="info status">
+          <font-awesome-icon v-if="statusClass == 'running'" icon="cog"/>
+          <font-awesome-icon v-if="statusClass == 'completed'" icon="check"/>
+          <font-awesome-icon v-if="statusClass == 'cancelled'" icon="ban"/>
+          <font-awesome-icon v-if="statusClass == 'queued'" :icon="['far', 'clock']"/>
+          <font-awesome-icon v-if="statusClass == 'failed'" icon="times"/>
+          {{ status | titleCase }}
+        </div>
+        <div v-if="isRunning" class="info pipeline">
+          <font-awesome-icon icon="list-ul"/>
+          {{ pipeline }}
+        </div>
       </div>
     </div>
-    <aside class="right">
-      //
+    <aside v-if="hasActions" class="right">
+      <font-awesome-icon v-if="canRedoBuild" icon="redo" class="redo-build"/>
+      <font-awesome-icon v-if="canCancelBuild" icon="ban" class="cancel-build"/>
     </aside>
   </div>
 </template>
@@ -68,6 +81,7 @@ export default {
     sha: String,
     branch: String,
     reference: String,
+    pipeline: String,
     durationSeconds: Number,
     date: Number,
     status: String,
@@ -82,22 +96,23 @@ export default {
   },
   filters: {
     trimSha: value => value.substring(0, 8),
-    easyTimeSeconds: (function easyTimeSeconds(value) {
+    easyTimeSeconds: function easyTimeSeconds(value) {
       const duration = moment.duration(value, 'seconds');
       const label = moment.utc(duration.asMilliseconds()).format('HH:mm:ss');
 
       return label.replace(/^00:/, '');
-    }),
+    },
     dateAgo: value => moment(value, 'X').fromNow(),
     gitTag: value => value.replace(/^refs\/tags\//, ''),
+    titleCase: value => _.startCase(_.toLower(value)),
   },
   methods: {
-    routeToBuild: (function routeToBuild() {
+    routeToBuild: function routeToBuild() {
       this.$router.push(`/build/${this.id}`);
-    }),
+    },
   },
   computed: {
-    statusClass: (function statusClass() {
+    statusClass: function statusClass() {
       const knownStatuses = [
         'completed', 'running', 'queued', 'failed', 'cancelled',
       ];
@@ -107,17 +122,33 @@ export default {
       }
 
       return 'unknown';
-    }),
-    isTagReference: (function isTagReference() {
+    },
+    isTagReference: function isTagReference() {
       return _.startsWith(this.reference, 'refs/tags/');
-    }),
-    canCancelBuild: (function canCancelBuild() {
+    },
+    canCancelBuild: function canCancelBuild() {
       const cancellableStatuses = [
         'running', 'queued',
       ];
 
       return cancellableStatuses.includes(this.status);
-    }),
+    },
+    canRedoBuild: function canRedoBuild() {
+      const redoableStatuses = [
+        'cancelled', 'completed', 'failed',
+      ];
+
+      return redoableStatuses.includes(this.status);
+    },
+    hasActions: function hasActions() {
+      return this.canRedoBuild || this.canCancelBuild;
+    },
+    isQueued: function isQueued() {
+      return this.status === 'queued';
+    },
+    isRunning: function isRunning() {
+      return this.status === 'running';
+    },
   },
 };
 </script>
@@ -204,9 +235,19 @@ export default {
           color #ea6666
 
     &.right
-      justify-content right
-      min-width 100px
-      max-width 100px
+      display flex
+      flex-direction column
+      justify-content flex-start
+      align-items top
+      padding 20px
+
+      svg
+        font-size 20px
+        margin-bottom 10px
+        color #174f7c
+
+        &:hover
+          color #333
 
   .content
     flex 1

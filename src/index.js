@@ -1,7 +1,7 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
   faCogs, faTools, faLayerGroup, faUsers, faSignOutAlt, faCog, faCheck,
-  faBan, faTimes, faCodeBranch, faSyncAlt, faTag,
+  faBan, faTimes, faCodeBranch, faSyncAlt, faTag, faRedo, faListUl,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faClock as farClock, faHourglass as farHourglass, faCalendar as farCalendar,
@@ -17,7 +17,7 @@ import store from './state';
 library.add(
   faCogs, faTools, faLayerGroup, faUsers, faSignOutAlt, faCog, faCheck,
   faBan, farClock, faTimes, faCodeBranch, farHourglass, farCalendar, faSyncAlt,
-  faTag,
+  faTag, faRedo, faListUl,
 );
 
 Vue.config.productionTip = false;

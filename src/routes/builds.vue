@@ -3,7 +3,11 @@
     <navigation current-link="/builds"/>
 
     <div class="build-filters">
-      <toolbar :onSelect="toolbarOnSelect" :index="buildFilterIndex" :values="toolbarValues"/>
+      <toolbar
+        :onSelect="toolbarOnSelect"
+        :index="buildFilterIndex"
+        :values="toolbarValues"
+      />
       <font-awesome-icon
         @mousedown="toolbarOnSelect(buildFilterIndex)"
         :class="{disabled: isFetchingBuilds}"
@@ -17,6 +21,11 @@
         <font-awesome-icon icon="cog"/>
       </div>
       <div v-if="!isFetchingBuilds" class="build-list">
+        <div v-if="!builds.length" class="no-builds-found">
+          <div class="label">
+            {{ noBuildsLabel }}
+          </div>
+        </div>
         <build-row v-for="(build, index) in builds" v-bind:key="index" v-bind="build" />
       </div>
     </div>
@@ -40,11 +49,11 @@ export default {
     toolbarValues: ['Active', 'Completed', 'All'],
   }),
   computed: {
-    isFetchingBuilds: (function isFetchingBuilds() {
+    isFetchingBuilds: function isFetchingBuilds() {
       return this.$store.getters.isFetchingBuilds;
-    }),
-    builds: (function builds() {
-      const index = this.$store.getters.getBuildFilterIndex;
+    },
+    builds: function builds() {
+      const index = this.buildFilterIndex;
 
       if (index === 0) {
         return this.$store.getters.getActiveBuilds;
@@ -59,25 +68,37 @@ export default {
       }
 
       return [];
-    }),
-    buildFilterIndex: (function buildFilterIndex() {
+    },
+    buildFilterIndex: function buildFilterIndex() {
       return this.$store.getters.getBuildFilterIndex;
-    }),
+    },
+    noBuildsLabel: function noBuildsLabel() {
+      if (this.buildFilterIndex === 0) {
+        return 'No active builds were found.';
+      }
+
+      if (this.buildFilterIndex === 1) {
+        return 'No completed builds were found.';
+      }
+
+      return 'No builds were found.';
+    },
   },
   directives: {
     TitleDirective,
   },
-  created: (function mounted() {
+  created: function mounted() {
     this.$store.dispatch('fetchBuilds');
-  }),
-  destroyed: (function destroyed() {
+  },
+  destroyed: function destroyed() {
     this.$store.commit('setBuildFilterIndex', 0);
-  }),
+  },
   methods: {
-    toolbarOnSelect: (function toolbarOnSelect(index) {
+    toolbarOnSelect: function toolbarOnSelect(index) {
       this.$store.commit('setBuildFilterIndex', index);
       this.$store.dispatch('fetchBuilds');
-    }),
+      window.$store = this.$store;
+    },
   },
 };
 </script>
@@ -140,4 +161,15 @@ export default {
 
       .build
         margin-bottom 15px
+
+      .no-builds-found
+        text-align center
+        color #ccc
+        margin 80px 0
+
+        .label
+          font-style italic
+          font-size 32px
+          font-weight 100
+          font-family 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
 </style>

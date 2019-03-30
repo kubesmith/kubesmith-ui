@@ -1,10 +1,8 @@
 <template>
   <div class="navigation">
-    <router-link class="logo" to="/builds">
-      <div class="image">
-        <LogoSVG/>
-      </div>
-    </router-link>
+    <div @mousedown="goToHome" class="image">
+      <LogoSVG/>
+    </div>
     <div class="main-links">
       <ul>
         <li>
@@ -78,12 +76,20 @@ export default {
         active: (this.currentLink === link),
       };
     },
-    logUserOut: function logUserOut(event) {
+    logUserOut(event) {
       event.stopImmediatePropagation();
       event.preventDefault();
 
       Cookie.remove('token');
       this.$router.push('/login?logged-out');
+    },
+    goToHome() {
+      if (this.$store.getters.getBuildFilterIndex !== 0) {
+        this.$store.commit('setBuildFilterIndex', 0);
+        this.$store.dispatch('fetchBuilds');
+      }
+
+      this.$router.push('/');
     },
   },
 };
@@ -131,31 +137,25 @@ export default {
         &:first-child
           padding 0 8px
 
-    .logo
-      cursor pointer
+    .image
       height 80px
+      line-height 80px
+      position relative
+      float left
+      width 100px
+      cursor pointer
 
-      &:active
-        margin-top 2px
+      svg
+        height 56px
+        width 70px
+        position absolute
+        top 50%
+        left 50%
+        margin-top -28px
+        margin-left -35px
 
-      .image
-        height 80px
-        line-height 80px
-        position relative
-        float left
-        width 100px
-
-        svg
-          height 56px
-          width 70px
-          position absolute
-          top 50%
-          left 50%
-          margin-top -28px
-          margin-left -35px
-
-          path
-            fill #174f7c
+        path
+          fill #174f7c
 
       .text
         float left

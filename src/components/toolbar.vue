@@ -1,10 +1,10 @@
 <template>
   <div class="toolbar">
     <div
-      :class="{ selected: isSelected(index) }"
-      v-for="(value, index) in values"
-      @mousedown="selectValueByIndex(index)"
-      v-bind:key="index" class="item">
+      :class="{ selected: isSelected(id) }"
+      v-for="(value, id) in values"
+      @mousedown="selectValueByIndex(id)"
+      v-bind:key="id" class="item">
       {{ value }}
     </div>
   </div>
@@ -23,28 +23,21 @@ export default {
       default: () => [],
     },
     onSelect: Function,
+    getIndex: Function,
   },
-  data: (function data() {
-    return {
-      currentlySelectedIndex: this.index,
-    };
-  }),
-  computed: {},
   methods: {
-    isSelected: (function isSelected(value) {
-      return this.currentlySelectedIndex === value;
-    }),
-    selectValueByIndex: (function selectValueByIndex(index) {
-      if (this.currentlySelectedIndex === index) {
+    isSelected: function isSelected(value) {
+      return this.index === value;
+    },
+    selectValueByIndex: function selectValueByIndex(index) {
+      if (this.index === index) {
         return;
       }
-
-      this.currentlySelectedIndex = index;
 
       if (index >= 0 && index < this.values.length) {
         this.onSelect(index, this.values[index]);
       }
-    }),
+    },
   },
 };
 </script>

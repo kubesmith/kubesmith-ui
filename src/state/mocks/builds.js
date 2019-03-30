@@ -1,5 +1,4 @@
 // exports
-
 export default [
   {
     id: 'P8nDg7yPjT5F6t',
@@ -11,53 +10,8 @@ export default [
     reference: 'refs/tags/0.1.14',
     durationSeconds: 657,
     date: 1553832319,
+    pipeline: 'Install dependencies',
     status: 'running',
-    author: {
-      avatar: 'https://avatars3.githubusercontent.com/u/1470571?v=4',
-      email: 'carldanley@gmail.com',
-      username: 'carldanley',
-    },
-  }, {
-    id: '2rIZm86gKyXSXn',
-    repository: 'kubesmith/kubesmith',
-    message: `Merge pull request #1 from some super long PR title that
-      probably should have been shortened but no one wanted to shorten it`,
-    sha: 'ce0f4b6f234fdg4sdfg44tafgwaert366',
-    branch: 'master',
-    reference: 'refs/heads/master',
-    durationSeconds: 657,
-    date: 1553832319,
-    status: 'running',
-    author: {
-      avatar: 'https://avatars3.githubusercontent.com/u/1470571?v=4',
-      email: 'carldanley@gmail.com',
-      username: 'carldanley',
-    },
-  }, {
-    id: 'azS4WRwjg6cFwC',
-    repository: 'carldanley/website',
-    message: 'Tweaking CI',
-    sha: 'sdfgkjhgkh36g456hjlk2456234246677',
-    branch: 'feature/improve-ci',
-    reference: 'refs/heads/master',
-    durationSeconds: 496,
-    date: 1553832319,
-    status: 'queued',
-    author: {
-      avatar: 'https://avatars3.githubusercontent.com/u/1470571?v=4',
-      email: 'carldanley@gmail.com',
-      username: 'carldanley',
-    },
-  }, {
-    id: 'SUApC5L4b42TiL',
-    repository: 'carldanley/website',
-    message: 'Tweaking CI',
-    sha: 'sdfgkjhgkh36g456hjlk2456234246677',
-    branch: 'feature/improve-ci',
-    reference: 'refs/heads/master',
-    durationSeconds: 496,
-    date: 1553832319,
-    status: 'queued',
     author: {
       avatar: 'https://avatars3.githubusercontent.com/u/1470571?v=4',
       email: 'carldanley@gmail.com',
