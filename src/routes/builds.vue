@@ -1,21 +1,23 @@
 <template>
   <div class="builds" v-title="'Builds | Kubesmith'">
-    <navigation current-link="/builds"></navigation>
+    <navigation current-link="/builds"/>
+
+    <div class="build-filters">
+      <toolbar :onSelect="toolbarOnSelect" :index="buildFilterIndex" :values="toolbarValues"/>
+      <font-awesome-icon
+        @mousedown="toolbarOnSelect(buildFilterIndex)"
+        :class="{disabled: isFetchingBuilds}"
+        class="refresh"
+        v-tooltip="'Refresh'"
+        icon="sync-alt"/>
+    </div>
 
     <div class="content">
-      <div v-if="loading" class="loading">
+      <div v-if="isFetchingBuilds" class="loading">
         <font-awesome-icon icon="cog"/>
       </div>
-      <div v-if="!loading" class="build-filters">
-        <div class="filters">
-          <div v-bind:class="{ selected: (currentFilter === 'active') }" class="filter first">Active</div>
-          <div v-bind:class="{ selected: (currentFilter === 'completed') }" class="filter">Completed</div>
-          <div v-bind:class="{ selected: (currentFilter === 'all') }" class="filter last">All</div>
-        </div>
-      </div>
-      <div v-if="!loading" class="build-list">
-        <build-row v-for="build in runningBuilds" v-bind:key="build.id" v-bind="build" />
-        <build-row v-for="build in queuedBuilds" v-bind:key="build.id" v-bind="build" />
+      <div v-if="!isFetchingBuilds" class="build-list">
+        <build-row v-for="(build, index) in builds" v-bind:key="index" v-bind="build" />
       </div>
     </div>
   </div>
@@ -25,37 +27,58 @@
 import TitleDirective from '@/directives/title';
 import Navigation from '@/components/navigation';
 import BuildRow from '@/components/build-row';
+import Toolbar from '@/components/toolbar';
 
 export default {
   name: 'builds',
   components: {
     Navigation,
     BuildRow,
+    Toolbar,
   },
   data: () => ({
-    currentFilter: 'active',
-    loading: false,
+    toolbarValues: ['Active', 'Completed', 'All'],
   }),
   computed: {
-    runningBuilds: (function runningBuilds() {
-      return this.$store.getters.getRunningBuilds;
+    isFetchingBuilds: (function isFetchingBuilds() {
+      return this.$store.getters.isFetchingBuilds;
     }),
-    queuedBuilds: (function queuedBuilds() {
-      return this.$store.getters.getQueuedBuilds;
+    builds: (function builds() {
+      const index = this.$store.getters.getBuildFilterIndex;
+
+      if (index === 0) {
+        return this.$store.getters.getActiveBuilds;
+      }
+
+      if (index === 1) {
+        return this.$store.getters.getCompletedBuilds;
+      }
+
+      if (index === 2) {
+        return this.$store.getters.getAllBuilds;
+      }
+
+      return [];
     }),
-    completedBuilds: (function completedBuilds() {
-      return this.$store.getters.getCompletedBuilds;
+    buildFilterIndex: (function buildFilterIndex() {
+      return this.$store.getters.getBuildFilterIndex;
     }),
   },
   directives: {
     TitleDirective,
   },
   created: (function mounted() {
-    this.loading = true;
-    this.$store.dispatch('getBuilds').then(() => {
-      this.loading = false;
-    });
+    this.$store.dispatch('fetchBuilds');
   }),
+  destroyed: (function destroyed() {
+    this.$store.commit('setBuildFilterIndex', 0);
+  }),
+  methods: {
+    toolbarOnSelect: (function toolbarOnSelect(index) {
+      this.$store.commit('setBuildFilterIndex', index);
+      this.$store.dispatch('fetchBuilds');
+    }),
+  },
 };
 </script>
 
@@ -65,11 +88,35 @@ export default {
   flex-direction column
   justify-content center
   height 100vh
-  box-sizing border-box
 
   .navigation
     flex 0 0 auto
     margin-bottom 2px
+
+  .build-filters
+    flex 0 0 auto
+    height auto
+    text-align center
+    font-size 0
+    display flex
+    justify-content center
+    align-items center
+    padding 20px 0
+    border-bottom 1px solid #ddd
+    background-color #f0f5f9
+
+    .toolbar
+      border 0px
+
+    .refresh
+      font-size 24px
+      cursor pointer
+      margin 0
+      margin-left 20px
+
+      &.disabled
+        cursor default
+        color #ccc
 
   .content
     flex 1 1 auto
@@ -85,40 +132,6 @@ export default {
 
       svg
         animation spin 2s linear infinite
-
-    .build-filters
-      height auto
-      text-align center
-      margin 20px auto
-      font-size 0
-
-      .filters
-        flex none
-        display inline-block
-        border-radius 7px
-        background-color #fff
-        overflow hidden
-        border 1px solid #ddd
-
-        .filter
-          display inline-block
-          padding 5px 20px
-          cursor pointer
-          font-size 16px
-          user-select none
-          transition-property background-color,color,border-color
-          transition-duration 0.1s
-          transition-timing-function ease-in-out
-          border-left 1px solid #ddd
-
-          &:hover
-            background-color #729dc0
-            color #fff
-            border-color #729dc0
-
-          &.selected
-            background-color #174f7c
-            color #fff
 
     .build-list
       width 900px

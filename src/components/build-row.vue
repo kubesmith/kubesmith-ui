@@ -1,5 +1,5 @@
 <template>
-  <div class="build">
+  <div class="build" @mousedown="routeToBuild">
     <aside class="left" v-bind:class="[statusClass]">
       <div class="avatar">
         <img :src="author.avatar"/>
@@ -21,6 +21,10 @@
         </div>
         <div class="data branch">
           <a href="#">
+            {{ author.username }}
+          </a>
+          &rarr;
+          <a href="#">
             <code>{{ sha | trimSha }}</code>
           </a>
           &rarr;
@@ -28,6 +32,10 @@
             <font-awesome-icon icon="code-branch"/>
             {{ branch }}
           </a>
+        </div>
+        <div v-if="isTagReference" class="data tag">
+          <font-awesome-icon icon="tag"/>
+          {{ reference | gitTag }}
         </div>
       </div>
       <div class="information">
@@ -41,21 +49,25 @@
         </div>
       </div>
     </div>
-    <aside class="right">Some stuff goes here</aside>
+    <aside class="right">
+      //
+    </aside>
   </div>
 </template>
 
 <script>
 import moment from 'moment';
+import _ from 'lodash';
 
 export default {
   name: 'build-row',
   props: {
-    id: Number,
+    id: String,
     repository: String,
     message: String,
     sha: String,
     branch: String,
+    reference: String,
     durationSeconds: Number,
     date: Number,
     status: String,
@@ -69,24 +81,21 @@ export default {
     },
   },
   filters: {
-    trimSha: (function trimSha(value) {
-      if (!value) {
-        return '';
-      }
-
-      return value.substring(0, 8);
-    }),
+    trimSha: value => value.substring(0, 8),
     easyTimeSeconds: (function easyTimeSeconds(value) {
       const duration = moment.duration(value, 'seconds');
       const label = moment.utc(duration.asMilliseconds()).format('HH:mm:ss');
 
       return label.replace(/^00:/, '');
     }),
-    dateAgo: (function dateAgo(value) {
-      return moment(value, 'X').fromNow();
+    dateAgo: value => moment(value, 'X').fromNow(),
+    gitTag: value => value.replace(/^refs\/tags\//, ''),
+  },
+  methods: {
+    routeToBuild: (function routeToBuild() {
+      this.$router.push(`/build/${this.id}`);
     }),
   },
-  methods: {},
   computed: {
     statusClass: (function statusClass() {
       const knownStatuses = [
@@ -98,6 +107,9 @@ export default {
       }
 
       return 'unknown';
+    }),
+    isTagReference: (function isTagReference() {
+      return _.startsWith(this.reference, 'refs/tags/');
     }),
     canCancelBuild: (function canCancelBuild() {
       const cancellableStatuses = [
@@ -201,6 +213,7 @@ export default {
     padding 5px 10px
     color #888
     min-width 0
+    font-size 14px
 
     svg
 
@@ -221,7 +234,7 @@ export default {
       margin-top 5px
 
       a
-        font-size 14px
+        font-size inherit
         color inherit
 
         &:hover
@@ -250,7 +263,6 @@ export default {
             background-color #ddd
 
     .information
-      font-size 14px
       border-top 1px solid #eee
       padding-top 5px
       margin-top 5px

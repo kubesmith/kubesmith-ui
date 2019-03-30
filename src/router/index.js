@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Cookie from 'js-cookie';
+import BuildRoute from '@/routes/build';
 import BuildsRoute from '@/routes/builds';
 import LoginRoute from '@/routes/login';
 import NotFoundRoute from '@/routes/not-found';
@@ -18,28 +19,27 @@ const router = new Router({
     {
       path: '/',
       redirect: '/builds',
-    },
-    {
+    }, {
       path: '/builds',
       name: 'builds',
       component: BuildsRoute,
-    },
-    {
+    }, {
+      path: '/build/:id',
+      name: 'build',
+      component: BuildRoute,
+    }, {
       path: '/repositories',
       name: 'repositories',
       component: RepositoriesRoute,
-    },
-    {
+    }, {
       path: '/teams',
       name: 'teams',
       component: TeamsRoute,
-    },
-    {
+    }, {
       path: '/settings',
       name: 'settings',
       component: SettingsRoute,
-    },
-    {
+    }, {
       path: '/login',
       name: 'login',
       component: LoginRoute,
@@ -48,21 +48,18 @@ const router = new Router({
           path: route.query.path,
         };
       },
-    },
-    {
+    }, {
       path: '*',
       name: 'not-found',
       component: NotFoundRoute,
-    },
-    {
+    }, {
       path: '/sign-up',
       name: 'sign-up',
       component: SignUpRoute,
       meta: {
         doesNotRequireAuth: true,
       },
-    },
-    {
+    }, {
       path: '/reset-password',
       name: 'reset-password',
       component: ResetPasswordRoute,

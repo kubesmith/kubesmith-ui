@@ -2,6 +2,7 @@
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const baseConfig = require('./webpack.config.base');
+const fs = require('fs');
 
 // internal dependencies
 const utils = require('./utils');
@@ -14,11 +15,11 @@ module.exports = merge(baseConfig, {
     clientLogLevel: 'warning',
     historyApiFallback: true,
     hot: true,
-    contentBase: 'dist',
+    contentBase: './dist/',
     compress: true,
     host: 'localhost',
     port: 8080,
-    open: true,
+    open: false,
     overlay: {
       warnings: false,
       errors: true
@@ -27,7 +28,7 @@ module.exports = merge(baseConfig, {
     quiet: true,
     watchOptions: {
       poll: false,
-    }
+    },
   },
 
   module: {

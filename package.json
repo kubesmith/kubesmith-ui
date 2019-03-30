@@ -53,6 +53,7 @@
     "stylus-loader": "^3.0.2",
     "uglify-es": "^3.3.9",
     "url-loader": "^1.1.2",
+    "v-tooltip": "^2.0.0-rc.33",
     "vue-loader": "^15.7.0",
     "vue-moment": "^4.0.0",
     "vue-server-renderer": "^2.6.10",
