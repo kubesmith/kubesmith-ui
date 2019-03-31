@@ -11,8 +11,9 @@ import {
   faGithub as fabGithub, faBitbucket as fabBitbucket,
 } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { Tooltip } from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
 import vueMoment from 'vue-moment';
-import vTooltip from 'v-tooltip';
 import Vue from 'vue';
 import App from './App';
 import router from './router';
@@ -27,7 +28,7 @@ library.add(
 Vue.config.productionTip = false;
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.use(vueMoment);
-Vue.use(vTooltip);
+Vue.use(Tooltip);
 
 /* eslint-disable no-new */
 new Vue({

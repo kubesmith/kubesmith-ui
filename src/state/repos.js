@@ -51,12 +51,15 @@ const actions = {
 
     setTimeout(() => {
       let repos = mockRepos;
+      let selectedRepo = {};
 
       if (searchText.length > 0) {
         repos = _.filter(mockRepos, repo => (new RegExp(`${searchText}`, 'i').test(repo.name)));
+      } else {
+        selectedRepo = _.first(mockRepos);
       }
 
-      store.commit('setSelectedRepo', 0);
+      store.commit('setSelectedRepo', selectedRepo);
       store.commit(reposKeys.SUCCESS, repos);
     }, Math.floor(Math.random(1000) + 250));
   },

@@ -21,15 +21,18 @@
         <loader/>
       </div>
       <div v-if="!isFetchingRepos" class="list">
-        <div v-if="!repositories.length" class="not-found">No repositories were found</div>
+        <div v-if="!repositories.length" class="not-found">No repositories were found.</div>
         <div
           @mousedown="setSelectedRepo(repo)"
           :class="{selected: isCurrentlySelected(repo.id)}"
           v-for="(repo, index) in repositories"
           :key="index" class="repo">
           <div class="name">
-            <font-awesome-icon :icon="getRepoProviderIcon(repo.provider)"/>
+            <font-awesome-icon class="provider" :icon="getRepoProviderIcon(repo.provider)"/>
             <span>{{ repo.name }}</span>
+            <el-tooltip effect="dark" content="This repository has builds running." placement="right">
+              <loader v-if="repo.hasRunningBuilds"/>
+            </el-tooltip>
           </div>
         </div>
       </div>
@@ -200,7 +203,11 @@ export default {
     overflow-y auto
 
     .not-found
-      background-color red
+      margin 40px 0
+      text-align center
+      color #174f7c
+      font-style italic
+      font-weight 100
 
     .repo
       border-bottom 1px solid #ddd
@@ -217,14 +224,25 @@ export default {
       .name
         color #555
         font-size 16px
-        white-space nowrap
-        overflow hidden
-        text-overflow ellipsis
         font-weight 300
+        display flex
+        align-items center
+
+        span
+          flex 1
+          min-width 0
+          white-space nowrap
+          overflow hidden
+          text-overflow ellipsis
 
         svg
-          margin-right 10px
           font-size 20px
+
+          &.loader
+            color #3477ac
+
+          &.provider
+            margin-right 10px
 
       &.selected
 
