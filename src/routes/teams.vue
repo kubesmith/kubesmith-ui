@@ -20,8 +20,4 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.teams
-  display flex
-  flex-direction column
-  min-height 100vh
 </style>

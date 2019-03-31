@@ -2,11 +2,10 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Cookie from 'js-cookie';
 import BuildRoute from '@/routes/build';
-import BuildsRoute from '@/routes/builds';
 import LoginRoute from '@/routes/login';
 import NotFoundRoute from '@/routes/not-found';
 import SignUpRoute from '@/routes/sign-up';
-import RepositoriesRoute from '@/routes/repositories';
+import ReposRoute from '@/routes/repos';
 import TeamsRoute from '@/routes/teams';
 import SettingsRoute from '@/routes/settings';
 import ResetPasswordRoute from '@/routes/reset-password';
@@ -18,19 +17,15 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      redirect: '/builds',
-    }, {
-      path: '/builds',
-      name: 'builds',
-      component: BuildsRoute,
+      redirect: '/repos',
     }, {
       path: '/build/:id',
       name: 'build',
       component: BuildRoute,
     }, {
-      path: '/repositories',
-      name: 'repositories',
-      component: RepositoriesRoute,
+      path: '/repos',
+      name: 'repos',
+      component: ReposRoute,
     }, {
       path: '/teams',
       name: 'teams',

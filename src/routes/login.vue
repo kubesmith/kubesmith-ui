@@ -38,11 +38,13 @@ export default {
   components: {
     LogoSVG,
   },
-  data: () => ({
-    email: '',
-    password: '',
-    loaderHeight: 0,
-  }),
+  data() {
+    return {
+      email: '',
+      password: '',
+      loaderHeight: 0,
+    };
+  },
   directives: {
     TitleDirective,
   },
@@ -170,11 +172,59 @@ export default {
           border-radius 4px
           z-index 0
 
-        button
+        .button
+          display block
+          padding 10px 0
+          text-align center
+          transition box-shadow, opacity
+          transition-duration .2s
+          transition-timing-function ease-in-out
+          cursor pointer
+          font-size 16px
           width 100%
           margin-bottom 10px
           flex 1
           z-index 1
+          line-height 32px
+          border-bottom-width 0
+          border-radius 4px
+          border-width 0
+          font-weight 500
+          background-color #b1b1b1
+          box-shadow 0 2px 4px rgba(37, 37, 37, 0.1),
+            inset 0 -1px 0 0 rgba(255,255,255,0.1),
+            inset 0 1px 0 0 rgba(255,255,255,0.1)
+
+          &:disabled
+            cursor not-allowed
+            opacity 0.5
+            box-shadow 0 2px 4px rgba(37, 37, 37, 0.1),
+              inset 0 -1px 0 0 rgba(255,255,255,0.1),
+              inset 0 1px 0 0 rgba(255,255,255,0.1) !important
+
+          &:hover
+            box-shadow 0 6px 6px rgba(37, 37, 37, 0.2),
+              inset 0 -1px 0 0 rgba(37,37,37,0.2),
+              inset 0 1px 0 0 rgba(37,37,37,0.2)
+
+
+          &.blue
+            color #fff
+            background-color #174f7c
+            text-shadow 0 1px 1px rgba(3,49,86,.8)
+            box-shadow 0 1px 2px rgba(3,49,86,.3),
+              inset 0 -1px 0 #0d3f68, inset 0 1px 0 #2f6089
+
+            &:disabled
+              cursor not-allowed
+              box-shadow 0 1px 2px rgba(3,49,86,.3),
+                inset 0 -1px 0 #0d3f68,
+                inset 0 1px 0 #2f6089 !important
+
+            &:hover
+              box-shadow 0 6px 6px rgba(3,49,86,.3),
+                inset 0 -1px 0 #0d3f68,
+                inset 0 1px 0 #2f6089
 
         input
           flex 1

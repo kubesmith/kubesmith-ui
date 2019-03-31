@@ -8,7 +8,6 @@ import utils from './utils';
 
 // constants
 const buildKeys = utils.createAsyncKeys('build');
-
 const stateData = {};
 
 const getters = {

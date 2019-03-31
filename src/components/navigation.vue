@@ -1,80 +1,68 @@
 <template>
   <div class="navigation">
-    <div @mousedown="goToHome" class="image">
-      <LogoSVG/>
-    </div>
-    <div class="main-links">
+    <header>
+      <div class="logo">
+        <router-link to="/">
+          <LogoSVG/>
+        </router-link>
+      </div>
+    </header>
+    <section class="profile">
+      <avatar/>
+    </section>
+    <nav>
       <ul>
-        <li>
-          <span class="line"></span>
-        </li>
-        <li v-for="link in links" v-bind:key="link.url" :class="getLinkClasses(link.url)">
+        <li :class="{current: isCurrentLink(link.url)}" v-for="(link, index) in links" :key="index">
           <router-link :to="link.url">
-            <font-awesome-icon :icon="link.icon"/> {{ link.name }}
+            <font-awesome-icon :icon="link.icon"/>
+            <div class="caption">{{ link.name }}</div>
           </router-link>
         </li>
-        <li>
-          <span class="line"></span>
-        </li>
       </ul>
-    </div>
-    <div class="search">
-      <input type="text" placeholder="Search ..."/>
-    </div>
-    <div class="quick-links">
-      <ul>
-        <li>
-          <div class="profile-picture">
-            <img src="https://gravatar.com/avatar/f9383ce985bd48ed45dcff66546f30a7"/>
-          </div>
-        </li>
-        <li>
-          <a href="javascript:void(0);" @click="logUserOut">
-            <font-awesome-icon icon="sign-out-alt"/> Logout
-          </a>
-        </li>
-      </ul>
-    </div>
+    </nav>
+    <footer @mousedown="logUserOut">
+      <font-awesome-icon icon="sign-out-alt"/>
+    </footer>
   </div>
 </template>
 
 <script>
 import Cookie from 'js-cookie';
+import Avatar from '@/components/avatar';
 // eslint-disable-next-line
 import LogoSVG from '@/images/kubesmith-dark.svg?import';
 
 export default {
   name: 'navigation',
-  props: ['currentLink'],
+  props: {
+    currentLink: String,
+  },
   components: {
     LogoSVG,
+    Avatar,
   },
-  data: () => ({
-    links: [
-      {
-        url: '/builds',
-        name: 'Builds',
-        icon: 'tools',
-      }, {
-        url: '/repositories',
-        name: 'Repositories',
-        icon: 'layer-group',
-      }, {
-        url: '/teams',
-        name: 'Teams',
-        icon: 'users',
-      }, {
-        url: '/settings',
-        name: 'Settings',
-        icon: 'cogs',
-      },
-    ],
-  }),
+  data() {
+    return {
+      links: [
+        {
+          url: '/repos',
+          name: 'Repos',
+          icon: 'layer-group',
+        }, {
+          url: '/teams',
+          name: 'Teams',
+          icon: 'users',
+        }, {
+          url: '/settings',
+          name: 'Settings',
+          icon: 'cogs',
+        },
+      ],
+    };
+  },
   methods: {
-    getLinkClasses(link) {
-      return {
-        active: (this.currentLink === link),
-      };
+    isCurrentLink(url) {
+      return (this.currentLink === url);
     },
     logUserOut(event) {
       event.stopImmediatePropagation();
@@ -83,138 +71,132 @@ export default {
       Cookie.remove('token');
       this.$router.push('/login?logged-out');
     },
-    goToHome() {
-      if (this.$store.getters.getBuildFilterIndex !== 0) {
-        this.$store.commit('setBuildFilterIndex', 0);
-        this.$store.dispatch('fetchBuilds');
-      }
-
-      this.$router.push('/');
-    },
   },
 };
 </script>
 
 <style scoped lang="stylus">
+$logoPadding = 20px
+$logoMovement = 3px
+
   .navigation
-    box-shadow 0 1px 2px rgba(3,49,86,.2)
-    min-height 80px
-    max-height 80px
+    width 100px
+    height 100vh
     display flex
-    background-color #fff
+    background-color #ddd
+    align-items center
+    justify-content flex-start
+    color #fff
+    flex-direction column
+    text-align center
+    background-color #174f7c
+    border-right 3px solid #5e9dce
 
-    ul
-      margin 0
-      padding 0
-      display block
-      height 80px
-      position relative
+    header
+      flex 0
+      width 100%
+      background-color #174f7c
 
-      li
-        display list-item
-        float left
-        list-style none
-        height 80px
-        padding 0 16px
+      .logo
+        width 100%
+        text-align center
+        margin 0 auto
+        padding $logoPadding 0
+        cursor pointer
+        user-select none
 
-        a
-          display block
-          vertical-align baseline
-          line-height 80px
-          transition color
-          transition-duration .1s
-          transition-timing-function ease-in-out
+        svg
+          width 80%
+
+          path
+            fill #fff
+
+        &:active
+          padding-bottom ($logoPadding - $logoMovement)
 
           svg
-            margin-right 10px
+            margin-top $logoMovement
+
+    section.profile
+      width 100%
+      user-select none
+
+      .avatar
+        margin 20px 0
+        max-width 70%
+        border 3px solid #65aee6
+
+    nav
+      flex 1
+      width 100%
+
+      ul
+        margin 0
+        list-style none
+        padding 0
+
+        li
+          cursor pointer
+          user-select none
+          line-height 0
+
+          a
+            display block
+            padding $logoPadding 0
+            transition-property background-color
+            transition-duration .1s
+            transition-timing-function ease-in-out
+
+            svg
+              font-size 40px
+              color #a6cbe7
+              margin-bottom 10px
+
+            .caption
+              text-transform uppercase
+              font-size 12px
+              line-height 12px
+              color #c2d9ea
+
+            &:hover
+              background-color #054170
 
           &:active
-            margin-top 2px
 
-          &:hover
-            color #174f7c
+            a
+              padding-bottom ($logoPadding - $logoMovement)
 
-        &:first-child
-          padding 0 8px
+              svg
+                margin-top $logoMovement
 
-    .image
-      height 80px
-      line-height 80px
-      position relative
-      float left
-      width 100px
+          &.current
+            background-color #3477ac
+
+            &:active
+
+              a
+                padding $logoPadding 0
+
+                svg
+                  margin-top 0
+
+            a
+
+              &:hover
+                background-color inherit
+                cursor default
+
+    footer
+      flex 0
+      width 100%
+      padding 20px 0
       cursor pointer
 
       svg
-        height 56px
-        width 70px
-        position absolute
-        top 50%
-        left 50%
-        margin-top -28px
-        margin-left -35px
+        font-size 30px
+        color #a6cbe7
 
-        path
-          fill #174f7c
-
-      .text
-        float left
-        line-height 80px
-        height 80px
-        text-transform uppercase
-        font-weight 600
-        color #174f7c
-
-    .main-links
-
-      .line
-        background-color #c3c8ce
-        display block
-        position relative
-        top 32px
-        width 1px
-        height 16px
-        line-height 80px
-
-      li.active
-
-        a
-          color #174f7c
-
-    .search
-      flex 1
-      display flex
-      align-items center
-
-      input
-        flex 1
-        height 40px
-        max-width 110px
-        transition max-width
-        transition-duration .2s
-        transition-timing-function ease-in-out
-
-        &:focus
-          max-width 260px
-
-
-    .quick-links
-
-      ul
-        margin-right 10px
-
-        li
-          display flex
-          align-items center
-
-          .profile-picture
-            display inline-block
-
-            img
-              border 1px solid #3d627f
-              vertical-align middle
-              width 40px
-              height 40px
-              border-radius 50%
+      &:hover
+        background-color #054170
 
 </style>
