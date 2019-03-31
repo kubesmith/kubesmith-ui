@@ -30,7 +30,7 @@
           <div class="name">
             <font-awesome-icon class="provider" :icon="getRepoProviderIcon(repo.provider)"/>
             <span>{{ repo.name }}</span>
-            <el-tooltip effect="dark" content="This repository has builds running." placement="right">
+            <el-tooltip placement="top" content="This repository has builds running.">
               <loader v-if="repo.hasRunningBuilds"/>
             </el-tooltip>
           </div>
@@ -227,6 +227,7 @@ export default {
         font-weight 300
         display flex
         align-items center
+        user-select none
 
         span
           flex 1
@@ -245,6 +246,7 @@ export default {
             margin-right 10px
 
       &.selected
+        cursor default
 
         .name
           font-weight bolder
