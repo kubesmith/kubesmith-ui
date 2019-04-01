@@ -21,10 +21,10 @@
         <loader/>
       </div>
       <div v-if="!isFetchingRepos" class="list">
-        <div v-if="!repositories.length" class="not-found">No repositories were found.</div>
+        <div v-if="!hasRepositories" class="not-found">No repositories were found.</div>
         <div
           @mousedown="setSelectedRepo(repo)"
-          :class="{selected: isCurrentlySelected(repo.id)}"
+          :class="{selected: (repo.id === selectedRepoID)}"
           v-for="(repo, index) in repositories"
           :key="index" class="repo">
           <div class="name">
@@ -50,9 +50,6 @@ export default {
       toggledFilters: false,
     };
   },
-  created() {
-    this.$store.dispatch('fetchRepos');
-  },
   computed: {
     isFetchingRepos() {
       return this.$store.getters.isFetchingRepos;
@@ -62,6 +59,15 @@ export default {
     },
     selectedRepoID() {
       return _.get(this.$store.getters.getSelectedRepo, 'id', 0);
+    },
+    hasRepositories() {
+      const repos = this.$store.getters.getRepositories;
+
+      if (!_.isArray(repos)) {
+        return false;
+      }
+
+      return (repos.length > 0);
     },
   },
   components: {
@@ -86,9 +92,6 @@ export default {
     }, 250),
     performSearch(value) {
       this.$store.dispatch('searchRepos', value);
-    },
-    isCurrentlySelected(id) {
-      return (this.selectedRepoID === id);
     },
     setSelectedRepo(repo) {
       this.$store.commit('setSelectedRepo', repo);

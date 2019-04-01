@@ -57,11 +57,14 @@ const mutations = {
 const actions = {
 
   fetchBuilds(store) {
-    store.commit(buildsKeys.PENDING);
+    return new Promise((resolve) => {
+      store.commit(buildsKeys.PENDING);
 
-    setTimeout(() => {
-      store.commit(buildsKeys.SUCCESS, mockBuilds);
-    }, Math.floor(Math.random(1000) + 250));
+      setTimeout(() => {
+        store.commit(buildsKeys.SUCCESS, mockBuilds);
+        resolve();
+      }, Math.floor(Math.random(1000) + 250));
+    });
   },
 
 };

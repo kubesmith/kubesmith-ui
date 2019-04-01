@@ -38,30 +38,31 @@ const mutations = {
 const actions = {
 
   fetchRepos(store) {
-    store.commit(reposKeys.PENDING);
+    return new Promise((resolve) => {
+      store.commit(reposKeys.PENDING);
 
-    setTimeout(() => {
-      store.commit('setSelectedRepo', _.first(mockRepos));
-      store.commit(reposKeys.SUCCESS, mockRepos);
-    }, Math.floor(Math.random(1000) + 250));
+      setTimeout(() => {
+        store.commit(reposKeys.SUCCESS, mockRepos);
+        resolve();
+      }, Math.floor(Math.random(1000) + 250));
+    });
   },
 
   searchRepos(store, searchText) {
-    store.commit(reposKeys.PENDING);
+    return new Promise((resolve) => {
+      store.commit(reposKeys.PENDING);
 
-    setTimeout(() => {
-      let repos = mockRepos;
-      let selectedRepo = {};
+      setTimeout(() => {
+        let repos = mockRepos;
 
-      if (searchText.length > 0) {
-        repos = _.filter(mockRepos, repo => (new RegExp(`${searchText}`, 'i').test(repo.name)));
-      } else {
-        selectedRepo = _.first(mockRepos);
-      }
+        if (searchText.length > 0) {
+          repos = _.filter(mockRepos, repo => (new RegExp(`${searchText}`, 'i').test(repo.name)));
+        }
 
-      store.commit('setSelectedRepo', selectedRepo);
-      store.commit(reposKeys.SUCCESS, repos);
-    }, Math.floor(Math.random(1000) + 250));
+        store.commit(reposKeys.SUCCESS, repos);
+        resolve();
+      }, Math.floor(Math.random(1000) + 250));
+    });
   },
 
 };

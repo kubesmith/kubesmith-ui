@@ -30,18 +30,22 @@ const mutations = {
 const actions = {
 
   fetchBuild(store, id) {
-    store.commit(buildKeys.PENDING);
+    return new Promise((resolve, reject) => {
+      store.commit(buildKeys.PENDING);
 
-    setTimeout(() => {
-      const found = _.find(mockBuilds, build => (build.id === id));
+      setTimeout(() => {
+        const found = _.find(mockBuilds, build => (build.id === id));
 
-      if (!found) {
-        store.commit(buildKeys.FAILURE);
-        return;
-      }
+        if (!found) {
+          store.commit(buildKeys.FAILURE);
+          reject();
+          return;
+        }
 
-      store.commit(buildKeys.SUCCESS, found);
-    }, Math.floor(Math.random(1000) + 250));
+        store.commit(buildKeys.SUCCESS, found);
+        resolve();
+      }, Math.floor(Math.random(1000) + 250));
+    });
   },
 
 };

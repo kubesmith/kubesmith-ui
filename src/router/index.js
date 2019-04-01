@@ -27,6 +27,10 @@ const router = new Router({
       name: 'repos',
       component: ReposRoute,
     }, {
+      path: '/repos/:id',
+      name: 'repo',
+      component: ReposRoute,
+    }, {
       path: '/teams',
       name: 'teams',
       component: TeamsRoute,
