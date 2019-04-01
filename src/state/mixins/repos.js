@@ -3,10 +3,9 @@ import Vue from 'vue';
 import axios from 'axios';
 
 // internal dependencies
-import utils from './utils';
+import utils from '../utils';
 
 // constants
-const BASE_URL = process.env.API_URL;
 const reposKeys = utils.createAsyncKeys('repos');
 const stateData = {
   selectedRepo: {},
@@ -49,7 +48,7 @@ const actions = {
   fetchRepos(store) {
     store.commit(reposKeys.PENDING);
 
-    return axios.get(`${BASE_URL}/v1/repos/`)
+    return axios.get(`${utils.getAPIHost()}/repos/`)
       .then((response) => {
         store.commit(reposKeys.SUCCESS, response.data);
       })

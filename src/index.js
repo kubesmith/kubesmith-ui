@@ -18,6 +18,7 @@ import Vue from 'vue';
 import App from './App';
 import router from './router';
 import store from './state';
+import Websocket from './state/websocket';
 
 library.add(
   faCogs, faTools, faLayerGroup, faUsers, faSignOutAlt, faCog, faCheck,
@@ -29,6 +30,7 @@ Vue.config.productionTip = false;
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.use(vueMoment);
 Vue.use(Tooltip);
+Vue.use(Websocket);
 
 /* eslint-disable no-new */
 new Vue({

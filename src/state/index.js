@@ -4,7 +4,7 @@ import Vuex from 'vuex';
 import _ from 'lodash';
 
 // internal dependencies
-import repos from './repos';
+import repos from './mixins/repos';
 
 // requirements
 Vue.use(Vuex);
