@@ -49,6 +49,9 @@ module.exports = merge(baseConfig, {
   plugins: [
     new MiniCssExtractPlugin({
       filename: 'main.css'
-    })
+    }),
+    new webpack.DefinePlugin({
+      'process.env': require('../config/prod.env')
+    }),
   ]
 });

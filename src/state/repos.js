@@ -1,12 +1,12 @@
 // external dependencies
 import Vue from 'vue';
-import _ from 'lodash';
+import axios from 'axios';
 
 // internal dependencies
-import mockRepos from './mocks/repos';
 import utils from './utils';
 
 // constants
+const BASE_URL = process.env.API_URL;
 const reposKeys = utils.createAsyncKeys('repos');
 const stateData = {
   selectedRepo: {},
@@ -29,6 +29,11 @@ const mutations = {
     Vue.set(state, [reposKeys.LOADING], true);
   },
 
+  [reposKeys.FAILURE](state, error) {
+    Vue.set(state, [reposKeys.LOADING], false);
+    Vue.set(state, [reposKeys.FAILURE], error);
+  },
+
   setSelectedRepo(state, repo) {
     Vue.set(state, 'selectedRepo', repo);
   },
@@ -42,31 +47,32 @@ const mutations = {
 const actions = {
 
   fetchRepos(store) {
-    return new Promise((resolve) => {
-      store.commit(reposKeys.PENDING);
+    store.commit(reposKeys.PENDING);
 
-      setTimeout(() => {
-        store.commit(reposKeys.SUCCESS, mockRepos);
-        resolve();
-      }, Math.floor(Math.random(1000) + 250));
-    });
+    return axios.get(`${BASE_URL}/v1/repos/`)
+      .then((response) => {
+        store.commit(reposKeys.SUCCESS, response.data);
+      })
+      .catch((error) => {
+        store.commit(reposKeys.FAILURE, error);
+      });
   },
 
-  searchRepos(store, searchText) {
-    return new Promise((resolve) => {
-      store.commit(reposKeys.PENDING);
+  searchRepos() {
+    // return new Promise((resolve) => {
+    //   store.commit(reposKeys.PENDING);
 
-      setTimeout(() => {
-        let repos = mockRepos;
+    //   setTimeout(() => {
+    //     let repos = mockRepos;
 
-        if (searchText.length > 0) {
-          repos = _.filter(mockRepos, repo => (new RegExp(`${searchText}`, 'i').test(repo.name)));
-        }
+    //     if (searchText.length > 0) {
+    //       repos = _.filter(mockRepos, repo => (new RegExp(`${searchText}`, 'i').test(repo.name)));
+    //     }
 
-        store.commit(reposKeys.SUCCESS, repos);
-        resolve();
-      }, Math.floor(Math.random(1000) + 250));
-    });
+    //     store.commit(reposKeys.SUCCESS, repos);
+    //     resolve();
+    //   }, Math.floor(Math.random(1000) + 250));
+    // });
   },
 
 };
