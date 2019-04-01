@@ -182,6 +182,9 @@ $logoMovement = 3px
 
             a
 
+              svg, .caption
+                color #fff
+
               &:hover
                 background-color inherit
                 cursor default

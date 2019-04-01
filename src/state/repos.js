@@ -14,7 +14,7 @@ const stateData = {
 
 const getters = {
   isFetchingRepos: state => state[reposKeys.LOADING],
-  getRepositories: state => state[reposKeys.STATE],
+  getRepos: state => state[reposKeys.STATE],
   getSelectedRepo: state => state.selectedRepo,
 };
 
@@ -31,6 +31,10 @@ const mutations = {
 
   setSelectedRepo(state, repo) {
     Vue.set(state, 'selectedRepo', repo);
+  },
+
+  clearSelectedRepo(state) {
+    Vue.set(state, 'selectedRepo', null);
   },
 
 };

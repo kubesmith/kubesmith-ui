@@ -1,42 +1,42 @@
 <template>
-  <div class="browser">
-      <div class="search">
-        <input type="text" @keyup="performDebouncedSearch" placeholder="Search repositories ..."/>
+  <div class="repo-browser">
+    <div class="search">
+      <input type="text" @keyup="performDebouncedSearch" placeholder="Search repositories ..."/>
+    </div>
+    <div class="actions">
+      <div @mousedown="toggleFilters" class="button change-filters">
+        <span class="text">Add Filters</span>
+        <font-awesome-icon v-if="!toggledFilters" icon="caret-down"/>
+        <font-awesome-icon v-if="toggledFilters" icon="times"/>
       </div>
-      <div class="actions">
-        <div @mousedown="toggleFilters" class="button change-filters">
-          <span class="text">Add Filters</span>
-          <font-awesome-icon v-if="!toggledFilters" icon="caret-down"/>
-          <font-awesome-icon v-if="toggledFilters" icon="times"/>
-        </div>
-        <div class="button add-repo">
-          <font-awesome-icon icon="plus"/>
-          <span class="text">Add Repo</span>
-        </div>
+      <div class="button add-repo">
+        <font-awesome-icon icon="plus"/>
+        <span class="text">Add Repo</span>
       </div>
-      <div :class="{toggled: toggledFilters}" class="filters">
-          <span>filters will go here</span>
-      </div>
-      <div v-if="isFetchingRepos" class="loading">
-        <loader/>
-      </div>
-      <div v-if="!isFetchingRepos" class="list">
-        <div v-if="!hasRepositories" class="not-found">No repositories were found.</div>
-        <div
-          @mousedown="setSelectedRepo(repo)"
-          :class="{selected: (repo.id === selectedRepoID)}"
-          v-for="(repo, index) in repositories"
-          :key="index" class="repo">
-          <div class="name">
-            <font-awesome-icon class="provider" :icon="getRepoProviderIcon(repo.provider)"/>
-            <span>{{ repo.name }}</span>
-            <el-tooltip placement="top" content="This repository has builds running.">
-              <loader v-if="repo.hasRunningBuilds"/>
-            </el-tooltip>
-          </div>
+    </div>
+    <div :class="{toggled: toggledFilters}" class="filters">
+        <span>filters will go here</span>
+    </div>
+    <div v-if="isFetchingRepos" class="loading">
+      <loader/>
+    </div>
+    <div v-if="!isFetchingRepos" class="list">
+      <div v-if="!hasRepositories" class="not-found">No repositories were found.</div>
+      <div
+        @mousedown="onRepoMouseDown(repo)"
+        :class="{selected: (repo.id === selectedRepoID)}"
+        v-for="(repo, index) in repositories"
+        :key="index" class="repo">
+        <div class="name">
+          <font-awesome-icon class="provider" :icon="getRepoProviderIcon(repo.provider)"/>
+          <span>{{ repo.name }}</span>
+          <el-tooltip placement="top" content="This repository has builds running.">
+            <loader v-if="repo.hasRunningBuilds"/>
+          </el-tooltip>
         </div>
       </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -45,6 +45,10 @@ import Loader from '@/components/loader';
 
 export default {
   name: 'repo-browser',
+  props: {
+    onRepoSelect: Function,
+    selectedRepoID: [String, Number],
+  },
   data() {
     return {
       toggledFilters: false,
@@ -55,13 +59,10 @@ export default {
       return this.$store.getters.isFetchingRepos;
     },
     repositories() {
-      return this.$store.getters.getRepositories;
-    },
-    selectedRepoID() {
-      return _.get(this.$store.getters.getSelectedRepo, 'id', 0);
+      return this.$store.getters.getRepos;
     },
     hasRepositories() {
-      const repos = this.$store.getters.getRepositories;
+      const repos = this.$store.getters.getRepos;
 
       if (!_.isArray(repos)) {
         return false;
@@ -93,22 +94,20 @@ export default {
     performSearch(value) {
       this.$store.dispatch('searchRepos', value);
     },
-    setSelectedRepo(repo) {
-      this.$store.commit('setSelectedRepo', repo);
-    },
     toggleFilters() {
       this.toggledFilters = !this.toggledFilters;
+    },
+    onRepoMouseDown(repo) {
+      if (_.isFunction(this.onRepoSelect)) {
+        this.onRepoSelect(repo);
+      }
     },
   },
 };
 </script>
 
 <style lang="stylus" scoped>
-.browser
-  flex 1
-  height 100vh
-  min-width 300px
-  max-width 300px
+.repo-browser
   background-color #e9effc
   display flex
   flex-direction column
