@@ -27,7 +27,6 @@ steps:
     CGO_ENABLED: 0
   commands:
   - go build -o /drone/src/webserver /drone/src/server/main.go
-  - cp /drone/src/webserver /artifacts/webserver
   volumes:
   - name: artifacts
     path: /drone
