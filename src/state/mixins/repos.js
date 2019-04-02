@@ -4,6 +4,7 @@ import axios from 'axios';
 
 // internal dependencies
 import utils from '../utils';
+import config from '@/config';
 
 // constants
 const reposKeys = utils.createAsyncKeys('repos');
@@ -48,7 +49,7 @@ const actions = {
   fetchRepos(store) {
     store.commit(reposKeys.PENDING);
 
-    return axios.get(`${utils.getAPIHost()}/repos/`)
+    return axios.get(`${config.API_URL}/v1/repos/`)
       .then((response) => {
         store.commit(reposKeys.SUCCESS, response.data);
       })

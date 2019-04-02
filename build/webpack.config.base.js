@@ -6,6 +6,9 @@ const { VueLoaderPlugin } = require('vue-loader');
 // internal dependencies
 const utils = require('./utils');
 
+// load the environment variables from dotenv
+require('dotenv').config();
+
 // exports
 module.exports = {
 
@@ -84,11 +87,6 @@ module.exports = {
       chunksSortMode: 'dependency'
     }),
     new VueLoaderPlugin(),
-    new CopyWebpackPlugin([{
-      from: utils.resolve('src/images'),
-      to: utils.resolve('dist/src/images'),
-      toType: 'dir'
-    }]),
     new CopyWebpackPlugin([{
       from: utils.resolve('src/images/favicon/'),
       to: utils.resolve('dist/'),

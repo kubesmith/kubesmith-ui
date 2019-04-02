@@ -1,8 +1,8 @@
 // internal dependencies
-import utils from '../utils';
+import config from '@/config';
 
 // constants
-const socket = new WebSocket(`ws://${utils.getAPIHost()}/ws`);
+const socket = new WebSocket(`${config.WEBSOCKET_URL}/v1/ws`);
 
 // logic
 const sendPing = () => {

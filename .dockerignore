@@ -1,0 +1,16 @@
+.git
+build/*
+config/*
+node_modules/*
+src/*
+.babelrc
+.dockerignore
+.editorconfig
+.env
+.eslintignore
+.eslintrc.js
+.gitignore
+Dockerfile
+index.html
+package.json
+yarn.lock

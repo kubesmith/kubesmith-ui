@@ -13,10 +13,4 @@ export default {
     };
   },
 
-  getAPIHost: () => {
-    const base = process.env.API_HOST;
-
-    return `${base}/v1`;
-  },
-
 };

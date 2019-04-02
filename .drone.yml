@@ -1,0 +1,20 @@
+kind: pipeline
+name: linux-amd64
+
+workspace:
+  base: /kubesmith-ui
+
+platform:
+  os: linux
+  arch: amd64
+
+volumes:
+- name: data
+  temp: {}
+
+steps:
+- name: install-dependencies
+  image: node
+  commands:
+  - npm install -g yarn
+  - yarn

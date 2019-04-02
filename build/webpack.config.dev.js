@@ -2,10 +2,6 @@
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const baseConfig = require('./webpack.config.base');
-const fs = require('fs');
-
-// internal dependencies
-const utils = require('./utils');
 
 // exports
 module.exports = merge(baseConfig, {
@@ -53,6 +49,15 @@ module.exports = merge(baseConfig, {
             },
           }
         ]
+      }, {
+        test: /\.(js|vue)$/,
+        loader: 'string-replace-loader',
+        options: {
+          multiple: [
+            { search: '@@API_URL@@', replace: process.env.API_URL },
+            { search: '@@WEBSOCKET_URL@@', replace: process.env.WEBSOCKET_URL },
+          ],
+        },
       }
     ]
   },

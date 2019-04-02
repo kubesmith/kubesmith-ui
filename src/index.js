@@ -12,7 +12,6 @@ import {
 } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { Tooltip } from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
 import vueMoment from 'vue-moment';
 import Vue from 'vue';
 import App from './App';
@@ -20,12 +19,17 @@ import router from './router';
 import store from './state';
 import Websocket from './state/websocket';
 
+// import stylesheets from element-ui
+import 'element-ui/lib/theme-chalk/tooltip.css';
+
+// add the font awesome icons
 library.add(
   faCogs, faTools, faLayerGroup, faUsers, faSignOutAlt, faCog, faCheck,
   faBan, farClock, faTimes, faCodeBranch, farHourglass, farCalendar, faSyncAlt,
   faTag, faRedo, faListUl, fabGithub, faCaretDown, faPlus, fabBitbucket,
 );
 
+// register components
 Vue.config.productionTip = false;
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.use(vueMoment);
