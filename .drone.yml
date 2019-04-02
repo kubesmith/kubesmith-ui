@@ -18,4 +18,4 @@ steps:
   environment:
     GOOS: linux
   commands:
-  - go build -o /kubesmith-ui/webserver /kubesmith-ui/server/main.go
+  - go build -o /drone/src/webserver /drone/src/server/main.go
