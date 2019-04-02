@@ -15,7 +15,6 @@ import (
 var currentDirectory string
 var directory *string
 var port *string
-var cachedMain string
 
 func replaceEnvironmentVariables(text string) string {
 	keys := []string{

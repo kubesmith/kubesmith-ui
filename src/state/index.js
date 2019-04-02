@@ -4,7 +4,8 @@ import Vuex from 'vuex';
 import _ from 'lodash';
 
 // internal dependencies
-import repos from './mixins/repos';
+import repos from '@/state/mixins/repos';
+import websocket from '@/state/mixins/websocket';
 
 // requirements
 Vue.use(Vuex);
@@ -19,6 +20,7 @@ let stateObject = {
 
 // mixins
 stateObject = _.merge(stateObject, repos);
+stateObject = _.merge(stateObject, websocket);
 
 // exports
 export default new Vuex.Store(stateObject);

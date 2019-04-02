@@ -2,6 +2,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { VueLoaderPlugin } = require('vue-loader');
+const { BaseHrefWebpackPlugin } = require('base-href-webpack-plugin');
 
 // internal dependencies
 const utils = require('./utils');
@@ -78,7 +79,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: 'index.html',
-      inject: false,
+      inject: true,
       minify: {
         removeComments: true,
         collapseWhitespace: true,
@@ -86,6 +87,7 @@ module.exports = {
       },
       chunksSortMode: 'dependency'
     }),
+    new BaseHrefWebpackPlugin({ baseHref: '/' }),
     new VueLoaderPlugin(),
     new CopyWebpackPlugin([{
       from: utils.resolve('src/images/favicon/'),

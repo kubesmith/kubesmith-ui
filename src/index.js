@@ -2,7 +2,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import {
   faCogs, faTools, faLayerGroup, faUsers, faSignOutAlt, faCog, faCheck,
   faBan, faTimes, faCodeBranch, faSyncAlt, faTag, faRedo, faListUl, faCaretDown,
-  faPlus,
+  faPlus, faWifi,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faClock as farClock, faHourglass as farHourglass, faCalendar as farCalendar,
@@ -14,10 +14,10 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { Tooltip } from 'element-ui';
 import vueMoment from 'vue-moment';
 import Vue from 'vue';
-import App from './App';
-import router from './router';
-import store from './state';
-import Websocket from './state/websocket';
+import App from '@/App';
+import router from '@/router';
+import store from '@/state';
+import Websocket from '@/websocket';
 
 // import stylesheets from element-ui
 import 'element-ui/lib/theme-chalk/tooltip.css';
@@ -26,7 +26,7 @@ import 'element-ui/lib/theme-chalk/tooltip.css';
 library.add(
   faCogs, faTools, faLayerGroup, faUsers, faSignOutAlt, faCog, faCheck,
   faBan, farClock, faTimes, faCodeBranch, farHourglass, farCalendar, faSyncAlt,
-  faTag, faRedo, faListUl, fabGithub, faCaretDown, faPlus, fabBitbucket,
+  faTag, faRedo, faListUl, fabGithub, faCaretDown, faPlus, fabBitbucket, faWifi,
 );
 
 // register components
@@ -34,7 +34,9 @@ Vue.config.productionTip = false;
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.use(vueMoment);
 Vue.use(Tooltip);
-Vue.use(Websocket);
+Vue.use(Websocket, {
+  store,
+});
 
 /* eslint-disable no-new */
 new Vue({

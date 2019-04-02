@@ -20,8 +20,24 @@
         </li>
       </ul>
     </nav>
-    <footer @mousedown="logUserOut">
-      <font-awesome-icon icon="sign-out-alt"/>
+    <footer>
+      <div class="connectivity">
+        <el-tooltip v-if="isOnline" placement="top"
+          content="Your browser is receiving real time updates about builds.">
+          <font-awesome-icon class="online" icon="wifi"/>
+        </el-tooltip>
+        <el-tooltip v-if="isOffline" placement="top"
+          content="Your browser is not receiving real time updates about builds.">
+          <font-awesome-icon class="offline" icon="wifi"/>
+        </el-tooltip>
+        <el-tooltip v-if="isReconnecting" placement="top"
+          content="Your browser is attempting to reconnect for real time updates.">
+          <font-awesome-icon class="reconnecting" icon="wifi"/>
+        </el-tooltip>
+      </div>
+      <div class="logout" @mousedown="logUserOut">
+        <font-awesome-icon icon="sign-out-alt"/>
+      </div>
     </footer>
   </div>
 </template>
@@ -40,6 +56,17 @@ export default {
   components: {
     LogoSVG,
     Avatar,
+  },
+  computed: {
+    isOnline() {
+      return this.$store.getters.websocketConnected;
+    },
+    isReconnecting() {
+      return this.$store.getters.websocketConnecting;
+    },
+    isOffline() {
+      return !this.isOnline && !this.isReconnecting;
+    },
   },
   data() {
     return {
@@ -192,14 +219,32 @@ $logoMovement = 3px
     footer
       flex 0
       width 100%
-      padding 20px 0
       cursor pointer
 
-      svg
-        font-size 30px
-        color #a6cbe7
+      .connectivity
+        padding 20px 0
 
-      &:hover
-        background-color #054170
+        svg
+          font-size 20px
+          opacity 0.5
+
+          &.online
+            color #5ecf60
+
+          &.offline
+            color #c65a50
+
+          &.reconnecting
+            color #d5d12a
+
+      .logout
+        padding 20px 0
+
+        svg
+          font-size 30px
+          color #a6cbe7
+
+        &:hover
+          background-color #054170
 
 </style>
