@@ -5,6 +5,10 @@ platform:
   os: linux
   arch: amd64
 
+volumes:
+- name: artifacts
+  temp: {}
+
 steps:
 - name: install-dependencies-and-build
   image: node:alpine
@@ -12,13 +16,21 @@ steps:
   - npm install -g yarn
   - yarn
   - yarn run prod
+  volumes:
+  - name: artifacts
+    path: /drone/src
 
 - name: build-linux
   image: golang
   environment:
     GOOS: linux
+    CGO_ENABLED: 0
   commands:
-  - go build -o /drone/src/webserver -a -installsuffix cgo /drone/src/server/main.go
+  - go build -o /drone/src/webserver /drone/src/server/main.go
+  - cp /drone/src/webserver /artifacts/webserver
+  volumes:
+  - name: artifacts
+    path: /drone/src
 
 - name: dockerize
   image: plugins/docker
@@ -29,3 +41,6 @@ steps:
       from_secret: docker_username
     password:
       from_secret: docker_password
+  volumes:
+  - name: artifacts
+    path: /drone/src
