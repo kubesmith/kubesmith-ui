@@ -18,4 +18,14 @@ steps:
   environment:
     GOOS: linux
   commands:
-  - go build -o /drone/src/webserver /drone/src/server/main.go
+  - go build -o /drone/src/webserver -a -installsuffix cgo /drone/src/server/main.go
+
+- name: dockerize
+  image: plugins/docker
+  settings:
+    auto_tag: true
+    repo: kubesmith/kubesmith-ui
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
