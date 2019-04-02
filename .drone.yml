@@ -18,7 +18,7 @@ steps:
   - yarn run prod
   volumes:
   - name: artifacts
-    path: /drone/src
+    path: /drone
 
 - name: build-linux
   image: golang
@@ -30,7 +30,7 @@ steps:
   - cp /drone/src/webserver /artifacts/webserver
   volumes:
   - name: artifacts
-    path: /drone/src
+    path: /drone
 
 - name: dockerize
   image: plugins/docker
@@ -43,4 +43,4 @@ steps:
       from_secret: docker_password
   volumes:
   - name: artifacts
-    path: /drone/src
+    path: /drone
