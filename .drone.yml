@@ -14,7 +14,20 @@ volumes:
 
 steps:
 - name: install-dependencies
-  image: node
+  image: node:alpine
   commands:
   - npm install -g yarn
   - yarn
+  volumes:
+  - name: data
+    path: /kubesmith-ui
+
+- name: build-linux
+  image: golang
+  environment:
+    GOOS: linux
+  commands:
+  - go build -o /kubesmith-ui/webserver /kubesmith-ui/server/main.go
+  volumes:
+  - name: data
+    path: /kubesmith-ui
