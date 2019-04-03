@@ -1,13 +1,14 @@
 <template>
   <div class="repos" v-title="'Repositories | Kubesmith'">
     <navigation current-link="/repos"></navigation>
-    <repo-browser :selectedRepoID="selectedRepositoryID" :onRepoSelect="setSelectedRepo"/>
-    <repo-viewer :id="selectedRepositoryID"/>
+    <repo-browser :selectedRepo="selectedRepo" :onRepoSelect="setSelectedRepo"/>
+    <repo-viewer :repo="selectedRepo"/>
   </div>
 </template>
 
 <script>
 import _ from 'lodash';
+import repos from '@/state/mixins/repos';
 import TitleDirective from '@/directives/title';
 import Navigation from '@/components/navigation';
 import RepoBrowser from '@/components/repo-browser';
@@ -16,7 +17,7 @@ import RepoViewer from '@/components/repo-viewer';
 export default {
   name: 'repos',
   beforeDestroy() {
-    this.$store.commit('clearSelectedRepo');
+    this.$store.commit(repos.keys.REPOS_SELECTED, null);
   },
   created() {
     this.$store.dispatch('fetchRepos').then(this.setupSelectedRepo);
@@ -27,14 +28,14 @@ export default {
     RepoViewer,
   },
   computed: {
-    selectedRepositoryID() {
+    selectedRepoID() {
       return _.get(this.selectedRepo, 'id');
     },
     selectedRepo() {
-      return this.$store.getters.getSelectedRepo;
+      return this.$store.getters.reposSelected;
     },
-    repositories() {
-      return this.$store.getters.getRepos;
+    repos() {
+      return this.$store.getters.reposCache;
     },
   },
   directives: {
@@ -47,9 +48,9 @@ export default {
 
       if (_.has(params, 'id')) {
         const id = _.parseInt(_.get(params, 'id', 0), 0);
-        repo = _.find(this.repositories, tmpRepo => (tmpRepo.id === id));
+        repo = this.repos[id];
       } else {
-        repo = _.first(this.repositories);
+        repo = _.first(_.values(this.repos));
       }
 
       this.setSelectedRepo(repo);
@@ -59,7 +60,7 @@ export default {
         return;
       }
 
-      this.$store.commit('setSelectedRepo', repo);
+      this.$store.commit(repos.keys.REPOS_SELECTED, repo);
     },
   },
   watch: {

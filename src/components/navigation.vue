@@ -23,11 +23,11 @@
     <footer>
       <div class="connectivity">
         <el-tooltip v-if="isOnline" placement="top"
-          content="Your browser is receiving real time updates about builds.">
+          content="Your browser is receiving real time updates.">
           <font-awesome-icon class="online" icon="wifi"/>
         </el-tooltip>
         <el-tooltip v-if="isOffline" placement="top"
-          content="Your browser is not receiving real time updates about builds.">
+          content="Your browser is not receiving real time updates.">
           <font-awesome-icon class="offline" icon="wifi"/>
         </el-tooltip>
         <el-tooltip v-if="isReconnecting" placement="top"

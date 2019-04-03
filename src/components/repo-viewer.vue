@@ -7,7 +7,7 @@
 <script>
 export default {
   name: 'repo-viewer',
-  props: ['id'],
+  props: ['repo'],
   created() {
     //
   },

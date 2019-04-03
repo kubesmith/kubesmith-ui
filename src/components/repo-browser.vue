@@ -17,15 +17,15 @@
     <div :class="{toggled: toggledFilters}" class="filters">
         <span>filters will go here</span>
     </div>
-    <div v-if="isFetchingRepos" class="loading">
+    <div v-if="reposLoading" class="loading">
       <loader/>
     </div>
-    <div v-if="!isFetchingRepos" class="list">
-      <div v-if="!hasRepositories" class="not-found">No repositories were found.</div>
+    <div v-if="!reposLoading" class="list">
+      <div v-if="!hasRepos" class="not-found">No repositories were found.</div>
       <div
         @mousedown="onRepoMouseDown(repo)"
         :class="{selected: (repo.id === selectedRepoID)}"
-        v-for="(repo, index) in repositories"
+        v-for="(repo, index) in repos"
         :key="index" class="repo">
         <div class="name">
           <font-awesome-icon class="provider" :icon="getRepoProviderIcon(repo.provider)"/>
@@ -47,7 +47,7 @@ export default {
   name: 'repo-browser',
   props: {
     onRepoSelect: Function,
-    selectedRepoID: [String, Number],
+    selectedRepo: [Object, null],
   },
   data() {
     return {
@@ -55,20 +55,21 @@ export default {
     };
   },
   computed: {
-    isFetchingRepos() {
-      return this.$store.getters.isFetchingRepos;
+    reposLoading() {
+      return this.$store.getters.reposLoading;
     },
-    repositories() {
-      return this.$store.getters.getRepos;
+    repos() {
+      return this.$store.getters.reposCache;
     },
-    hasRepositories() {
-      const repos = this.$store.getters.getRepos;
-
-      if (!_.isArray(repos)) {
-        return false;
+    hasRepos() {
+      return (_.values(this.repos).length > 0);
+    },
+    selectedRepoID() {
+      if (!this.selectedRepo) {
+        return '';
       }
 
-      return (repos.length > 0);
+      return this.selectedRepo.id;
     },
   },
   components: {

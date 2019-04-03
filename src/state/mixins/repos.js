@@ -1,13 +1,14 @@
 // external dependencies
 import Vue from 'vue';
-// import axios from 'axios';
+import axios from 'axios';
+import _ from 'lodash';
 
 // internal dependencies
-// import config from '@/config';
+import config from '@/config';
 
 // constants
 const keys = {
-  REPOS_PENDING: 'REPOS_PENDING',
+  REPOS_ERROR: 'REPOS_ERROR',
   REPOS_LOADING: 'REPOS_LOADING',
   REPOS_LOADED: 'REPOS_LOADED',
   REPOS_CACHE: 'REPOS_CACHE',
@@ -15,7 +16,7 @@ const keys = {
 };
 
 const stateData = {
-  [keys.REPOS_PENDING]: false,
+  [keys.REPOS_ERROR]: false,
   [keys.REPOS_LOADING]: false,
   [keys.REPOS_LOADED]: false,
   [keys.REPOS_CACHE]: {},
@@ -24,34 +25,71 @@ const stateData = {
 
 const getters = {
 
-  reposPending: state => state[keys.REPOS_PENDING],
   reposLoading: state => state[keys.REPOS_LOADING],
   reposLoaded: state => state[keys.REPOS_LOADED],
   reposCache: state => state[keys.REPOS_CACHE],
   reposSelected: state => state[keys.REPOS_SELECTED],
+  reposError: state => state[keys.REPOS_ERROR],
 
 };
 
 const mutations = {
 
-  [keys.REPOS_PENDING](state, pending) {
-    Vue.set(state, [keys.REPOS_PENDING], pending);
+  [keys.REPOS_LOADING](state, loading) {
+    Vue.set(state, [keys.REPOS_LOADING], !!loading);
+  },
+
+  [keys.REPOS_LOADED](state, loaded) {
+    Vue.set(state, [keys.REPOS_LOADING], false);
+    Vue.set(state, [keys.REPOS_LOADED], !!loaded);
+  },
+
+  [keys.REPOS_CACHE](state, repo) {
+    const cache = state[keys.REPOS_CACHE];
+    cache[repo.id] = repo;
+
+    Vue.set(state, [keys.REPOS_CACHE], cache);
+  },
+
+  [keys.REPOS_SELECTED](state, selected) {
+    Vue.set(state, [keys.REPOS_SELECTED], selected);
+  },
+
+  [keys.REPOS_ERROR](state, error) {
+    Vue.set(state, [keys.REPOS_LOADING], false);
+    Vue.set(state, [keys.REPOS_ERROR], error);
   },
 
 };
 
 const actions = {
 
-  fetchRepos() {
-    // store.commit(repoKeys.PENDING);
+  fetchRepos(store) {
+    if (store.getters.reposLoaded === true) {
+      return new Promise(resolve => resolve(store.getters.repoCache));
+    }
 
-    // return axios.get(`${config.API_URL}/v1/repos/`)
-    //   .then((response) => {
-    //     store.commit(repoKeys.SUCCESS, response.data);
-    //   })
-    //   .catch((error) => {
-    //     store.commit(repoKeys.FAILURE, error);
-    //   });
+    store.commit(keys.REPOS_LOADING, true);
+    return axios.get(`${config.API_URL}/v1/repos/`)
+      .then((response) => {
+        if (!_.isArray(response.data)) {
+          store.commit(keys.REPOS_ERROR, new Error('expected array'));
+          return;
+        }
+
+        response.data.forEach((repo) => {
+          if (!repo.id) {
+            return;
+          }
+
+          store.commit(keys.REPOS_CACHE, repo);
+        });
+
+        store.commit(keys.REPOS_LOADED, true);
+      })
+      .catch((error) => {
+        store.commit(keys.REPOS_ERROR, error);
+      });
   },
 
   searchRepos(store) {
