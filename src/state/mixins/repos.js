@@ -13,6 +13,7 @@ const keys = {
   REPOS_LOADED: 'REPOS_LOADED',
   REPOS_CACHE: 'REPOS_CACHE',
   REPOS_SELECTED: 'REPOS_SELECTED',
+  REPOS_DISPLAYED: 'REPOS_DISPLAYED',
 };
 
 const stateData = {
@@ -21,6 +22,7 @@ const stateData = {
   [keys.REPOS_LOADED]: false,
   [keys.REPOS_CACHE]: {},
   [keys.REPOS_SELECTED]: null,
+  [keys.REPOS_DISPLAYED]: [],
 };
 
 const getters = {
@@ -30,6 +32,7 @@ const getters = {
   reposCache: state => state[keys.REPOS_CACHE],
   reposSelected: state => state[keys.REPOS_SELECTED],
   reposError: state => state[keys.REPOS_ERROR],
+  reposDisplayed: state => state[keys.REPOS_DISPLAYED],
 
 };
 
@@ -60,13 +63,21 @@ const mutations = {
     Vue.set(state, [keys.REPOS_ERROR], error);
   },
 
+  [keys.REPOS_DISPLAYED](state, repos) {
+    if (!_.isArray(repos)) {
+      return;
+    }
+
+    Vue.set(state, [keys.REPOS_DISPLAYED], repos);
+  },
+
 };
 
 const actions = {
 
   fetchRepos(store) {
     if (store.getters.reposLoaded === true) {
-      return new Promise(resolve => resolve(store.getters.repoCache));
+      return Promise.resolve(store.getters.repoCache);
     }
 
     store.commit(keys.REPOS_LOADING, true);
@@ -86,33 +97,23 @@ const actions = {
         });
 
         store.commit(keys.REPOS_LOADED, true);
+        store.commit(keys.REPOS_DISPLAYED, _.values(store.getters.reposCache));
       })
       .catch((error) => {
         store.commit(keys.REPOS_ERROR, error);
       });
   },
 
-  searchRepos(store) {
-    if (store.getters.websocketConnected) {
-      // search locally
-    } else {
-      // search remotely
-    }
+  searchRepos(store, searchText) {
+    return store.dispatch('fetchRepos').then(() => {
+      let repos = _.values(store.getters.reposCache);
 
-    // return new Promise((resolve) => {
-    //   store.commit(repoKeys.PENDING);
+      if (searchText.length > 0) {
+        repos = _.filter(repos, repo => (new RegExp(`${searchText}`, 'i').test(repo.name)));
+      }
 
-    //   setTimeout(() => {
-    //     let repos = mockRepos;
-
-    //     if (searchText.length > 0) {
-    //       repos = _.filter(mockRepos, repo => (new RegExp(`${searchText}`, 'i').test(repo.name)));
-    //     }
-
-    //     store.commit(repoKeys.SUCCESS, repos);
-    //     resolve();
-    //   }, Math.floor(Math.random(1000) + 250));
-    // });
+      store.commit(keys.REPOS_DISPLAYED, repos);
+    });
   },
 
 };

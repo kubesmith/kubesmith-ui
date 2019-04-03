@@ -18,6 +18,7 @@ export default {
   name: 'repos',
   beforeDestroy() {
     this.$store.commit(repos.keys.REPOS_SELECTED, null);
+    this.$store.commit(repos.keys.REPOS_DISPLAYED, null);
   },
   created() {
     this.$store.dispatch('fetchRepos').then(this.setupSelectedRepo);
@@ -35,6 +36,9 @@ export default {
       return this.$store.getters.reposSelected;
     },
     repos() {
+      return this.$store.getters.reposDisplayed;
+    },
+    cachedRepos() {
       return this.$store.getters.reposCache;
     },
   },
@@ -48,9 +52,9 @@ export default {
 
       if (_.has(params, 'id')) {
         const id = _.parseInt(_.get(params, 'id', 0), 0);
-        repo = this.repos[id];
+        repo = this.cachedRepos[id];
       } else {
-        repo = _.first(_.values(this.repos));
+        repo = _.first(this.repos);
       }
 
       this.setSelectedRepo(repo);

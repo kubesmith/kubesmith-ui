@@ -1,6 +1,6 @@
 <template>
   <div class="repo-viewer">
-    Placeholder
+    {{ repo }}
   </div>
 </template>
 

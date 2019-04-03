@@ -59,7 +59,7 @@ export default {
       return this.$store.getters.reposLoading;
     },
     repos() {
-      return this.$store.getters.reposCache;
+      return this.$store.getters.reposDisplayed;
     },
     hasRepos() {
       return (_.values(this.repos).length > 0);
