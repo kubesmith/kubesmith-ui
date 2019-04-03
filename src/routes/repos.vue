@@ -55,6 +55,10 @@ export default {
       this.setSelectedRepo(repo);
     },
     setSelectedRepo(repo) {
+      if (!repo) {
+        return;
+      }
+
       this.$store.commit('setSelectedRepo', repo);
     },
   },

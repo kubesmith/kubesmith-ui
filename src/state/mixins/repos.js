@@ -1,66 +1,68 @@
 // external dependencies
 import Vue from 'vue';
-import axios from 'axios';
+// import axios from 'axios';
 
 // internal dependencies
-import utils from '../utils';
-import config from '@/config';
+// import config from '@/config';
 
 // constants
-const reposKeys = utils.createAsyncKeys('repos');
+const keys = {
+  REPOS_PENDING: 'REPOS_PENDING',
+  REPOS_LOADING: 'REPOS_LOADING',
+  REPOS_LOADED: 'REPOS_LOADED',
+  REPOS_CACHE: 'REPOS_CACHE',
+  REPOS_SELECTED: 'REPOS_SELECTED',
+};
+
 const stateData = {
-  selectedRepo: {},
+  [keys.REPOS_PENDING]: false,
+  [keys.REPOS_LOADING]: false,
+  [keys.REPOS_LOADED]: false,
+  [keys.REPOS_CACHE]: {},
+  [keys.REPOS_SELECTED]: null,
 };
 
 const getters = {
-  isFetchingRepos: state => state[reposKeys.LOADING],
-  getRepos: state => state[reposKeys.STATE],
-  getSelectedRepo: state => state.selectedRepo,
+
+  reposPending: state => state[keys.REPOS_PENDING],
+  reposLoading: state => state[keys.REPOS_LOADING],
+  reposLoaded: state => state[keys.REPOS_LOADED],
+  reposCache: state => state[keys.REPOS_CACHE],
+  reposSelected: state => state[keys.REPOS_SELECTED],
+
 };
 
 const mutations = {
 
-  [reposKeys.SUCCESS](state, builds) {
-    Vue.set(state, [reposKeys.LOADING], false);
-    Vue.set(state, [reposKeys.STATE], builds);
-  },
-
-  [reposKeys.PENDING](state) {
-    Vue.set(state, [reposKeys.LOADING], true);
-  },
-
-  [reposKeys.FAILURE](state, error) {
-    Vue.set(state, [reposKeys.LOADING], false);
-    Vue.set(state, [reposKeys.FAILURE], error);
-  },
-
-  setSelectedRepo(state, repo) {
-    Vue.set(state, 'selectedRepo', repo);
-  },
-
-  clearSelectedRepo(state) {
-    Vue.set(state, 'selectedRepo', null);
+  [keys.REPOS_PENDING](state, pending) {
+    Vue.set(state, [keys.REPOS_PENDING], pending);
   },
 
 };
 
 const actions = {
 
-  fetchRepos(store) {
-    store.commit(reposKeys.PENDING);
+  fetchRepos() {
+    // store.commit(repoKeys.PENDING);
 
-    return axios.get(`${config.API_URL}/v1/repos/`)
-      .then((response) => {
-        store.commit(reposKeys.SUCCESS, response.data);
-      })
-      .catch((error) => {
-        store.commit(reposKeys.FAILURE, error);
-      });
+    // return axios.get(`${config.API_URL}/v1/repos/`)
+    //   .then((response) => {
+    //     store.commit(repoKeys.SUCCESS, response.data);
+    //   })
+    //   .catch((error) => {
+    //     store.commit(repoKeys.FAILURE, error);
+    //   });
   },
 
-  searchRepos() {
+  searchRepos(store) {
+    if (store.getters.websocketConnected) {
+      // search locally
+    } else {
+      // search remotely
+    }
+
     // return new Promise((resolve) => {
-    //   store.commit(reposKeys.PENDING);
+    //   store.commit(repoKeys.PENDING);
 
     //   setTimeout(() => {
     //     let repos = mockRepos;
@@ -69,7 +71,7 @@ const actions = {
     //       repos = _.filter(mockRepos, repo => (new RegExp(`${searchText}`, 'i').test(repo.name)));
     //     }
 
-    //     store.commit(reposKeys.SUCCESS, repos);
+    //     store.commit(repoKeys.SUCCESS, repos);
     //     resolve();
     //   }, Math.floor(Math.random(1000) + 250));
     // });
@@ -79,9 +81,7 @@ const actions = {
 
 // exports
 export default {
-  keys: {
-    reposKeys,
-  },
+  keys,
   state: stateData,
   getters,
   mutations,
